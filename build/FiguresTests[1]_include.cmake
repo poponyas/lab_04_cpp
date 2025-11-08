@@ -1,0 +1,5 @@
+if(EXISTS "/workspace/build/FiguresTests[1]_tests.cmake")
+  include("/workspace/build/FiguresTests[1]_tests.cmake")
+else()
+  add_test(FiguresTests_NOT_BUILT FiguresTests_NOT_BUILT)
+endif()
