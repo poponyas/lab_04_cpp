@@ -15,7 +15,6 @@ private:
     {
         std::shared_ptr<T[]> new_data = std::make_shared<T[]>(new_capacity);
 
-        // Перемещение элементов при увеличении емкости
         for (size_t i = 0; i < arr_size; ++i)
         {
             if constexpr (std::is_move_assignable_v<T>)

@@ -11,7 +11,7 @@ public:
 
     virtual Point<T> getCenter() const = 0;
     virtual void printVertices(std::ostream &os) const = 0;
-    virtual void readFromStream(std::istream &is) = 0; // Изменил имя и убрал const
+    virtual void readFromStream(std::istream &is) = 0;
 
     virtual double area() const = 0;
     virtual explicit operator double() const { return area(); }
