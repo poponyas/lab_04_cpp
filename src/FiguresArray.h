@@ -7,20 +7,19 @@ template <Scalar T>
 class FiguresArray
 {
 private:
-    Array<std::unique_ptr<Figure<T>>> figures;
+    Array<std::shared_ptr<Figure<T>>> figures;
 
 public:
     FiguresArray() = default;
 
-    FiguresArray(const FiguresArray &) = delete;
-    FiguresArray &operator=(const FiguresArray &) = delete;
-
+    FiguresArray(const FiguresArray &) = default;
+    FiguresArray &operator=(const FiguresArray &) = default;
     FiguresArray(FiguresArray &&) = default;
     FiguresArray &operator=(FiguresArray &&) = default;
 
-    void addFigure(std::unique_ptr<Figure<T>> figure)
+    void addFigure(std::shared_ptr<Figure<T>> figure)
     {
-        figures.add(std::move(figure));
+        figures.add(figure);
     }
 
     void removeFigure(size_t index)
@@ -55,12 +54,12 @@ public:
         return figures.size();
     }
 
-    std::unique_ptr<Figure<T>> &operator[](size_t index)
+    std::shared_ptr<Figure<T>> &operator[](size_t index)
     {
         return figures[index];
     }
 
-    const std::unique_ptr<Figure<T>> &operator[](size_t index) const
+    const std::shared_ptr<Figure<T>> &operator[](size_t index) const
     {
         return figures[index];
     }

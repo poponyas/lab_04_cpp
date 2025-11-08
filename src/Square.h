@@ -12,6 +12,27 @@ private:
 public:
     Square() : vertices(std::make_unique<Point<T>[]>(VERTICES_COUNT)) {}
 
+    Square(const Square &other) : vertices(std::make_unique<Point<T>[]>(VERTICES_COUNT))
+    {
+        for (int i = 0; i < VERTICES_COUNT; ++i)
+        {
+            vertices[i] = other.vertices[i];
+        }
+    }
+
+    Square &operator=(const Square &other)
+    {
+        if (this != &other)
+        {
+            vertices = std::make_unique<Point<T>[]>(VERTICES_COUNT);
+            for (int i = 0; i < VERTICES_COUNT; ++i)
+            {
+                vertices[i] = other.vertices[i];
+            }
+        }
+        return *this;
+    }
+
     Square(Square &&other) noexcept = default;
     Square &operator=(Square &&other) noexcept = default;
 

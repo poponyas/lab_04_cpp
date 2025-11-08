@@ -13,6 +13,27 @@ private:
 public:
     Octagon() : vertices(std::make_unique<Point<T>[]>(VERTICES_COUNT)) {}
 
+    Octagon(const Octagon &other) : vertices(std::make_unique<Point<T>[]>(VERTICES_COUNT))
+    {
+        for (int i = 0; i < VERTICES_COUNT; ++i)
+        {
+            vertices[i] = other.vertices[i];
+        }
+    }
+
+    Octagon &operator=(const Octagon &other)
+    {
+        if (this != &other)
+        {
+            vertices = std::make_unique<Point<T>[]>(VERTICES_COUNT);
+            for (int i = 0; i < VERTICES_COUNT; ++i)
+            {
+                vertices[i] = other.vertices[i];
+            }
+        }
+        return *this;
+    }
+
     Octagon(Octagon &&other) noexcept = default;
     Octagon &operator=(Octagon &&other) noexcept = default;
 

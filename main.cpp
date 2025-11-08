@@ -1,9 +1,77 @@
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include "src/Triangle.h"
 #include "src/Square.h"
 #include "src/Octagon.h"
 #include "src/FiguresArray.h"
+
+void demonstrateArraySpecializations()
+{
+    std::cout << "\n1. Array<std::shared_ptr<Figure<int>>> (base type):\n";
+    Array<std::shared_ptr<Figure<int>>> figureArray;
+
+    auto triangle = std::make_shared<Triangle<int>>();
+    std::istringstream input1("0 0 3 0 0 4");
+    input1 >> *triangle;
+    figureArray.add(triangle);
+
+    auto square = std::make_shared<Square<int>>();
+    std::istringstream input2("0 0 5");
+    input2 >> *square;
+    figureArray.add(square);
+
+    std::cout << "   Size: " << figureArray.size() << "\n";
+    std::cout << "   Total area: ";
+    double total = 0;
+    for (size_t i = 0; i < figureArray.size(); ++i)
+    {
+        total += figureArray[i]->area();
+    }
+    std::cout << total << "\n";
+
+    std::cout << "\n2. Array<Square<double>> (derived type, non-pointer):\n";
+    Array<Square<double>> squareArray;
+
+    Square<double> sq1, sq2;
+    std::istringstream input3("1 1 3");
+    input3 >> sq1;
+    std::istringstream input4("2 2 4");
+    input4 >> sq2;
+
+    squareArray.add(sq1);
+    squareArray.add(std::move(sq2));
+
+    std::cout << "   Size: " << squareArray.size() << "\n";
+    std::cout << "   Areas: ";
+    for (size_t i = 0; i < squareArray.size(); ++i)
+    {
+        std::cout << squareArray[i].area() << " ";
+    }
+    std::cout << "\n";
+
+    std::cout << "\n3. Demonstration of copying:\n";
+    Array<Square<double>> copiedArray = squareArray;
+    std::cout << "   Original size: " << squareArray.size() << "\n";
+    std::cout << "   Copied size: " << copiedArray.size() << "\n";
+    std::cout << "   Copy successful: " << (squareArray.size() == copiedArray.size() ? "YES" : "NO") << "\n";
+
+    std::cout << "\n4. Demonstration of conversion to double:\n";
+    std::cout << "   Triangle area as double: " << static_cast<double>(*triangle) << "\n";
+    std::cout << "   Square area as double: " << static_cast<double>(*square) << "\n";
+
+    std::cout << "\n5. Demonstration of comparison:\n";
+    Square<double> sq3, sq4;
+    std::istringstream input5("0 0 5");
+    std::istringstream input6("0 0 5");
+    input5 >> sq3;
+    input6 >> sq4;
+
+    bool areEqual = sq3.operator==(sq4);
+    std::cout << "   Two identical squares are equal: " << (areEqual ? "YES" : "NO") << "\n";
+
+    std::cout << std::string(60, '=') << "\n\n";
+}
 
 template <Scalar T>
 void demonstrateFigures()
@@ -22,6 +90,7 @@ void demonstrateFigures()
         std::cout << "4 - Show all figures info\n";
         std::cout << "5 - Remove figure by index\n";
         std::cout << "6 - Calculate total area\n";
+        std::cout << "7 - Show Array specializations demo\n";
         std::cout << "0 - Exit\n";
         std::cout << "Current figures count: " << arr.getSize() << "\n";
         std::cout << "Enter your choice: ";
@@ -98,6 +167,11 @@ void demonstrateFigures()
                 std::cout << "Total area of all figures: " << arr.totalArea() << "\n";
                 break;
             }
+            case 7:
+            {
+                demonstrateArraySpecializations();
+                break;
+            }
             default:
                 std::cout << "Invalid choice. Please try again.\n";
                 break;
@@ -114,7 +188,8 @@ int main()
 {
     std::cout << "=== Figure Management System ===\n\n";
 
-    // Демонстрация работы с разными типами
+    demonstrateArraySpecializations();
+
     std::cout << "1. Working with int type\n";
     demonstrateFigures<int>();
 

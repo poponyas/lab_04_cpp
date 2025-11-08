@@ -6,11 +6,32 @@ template <Scalar T>
 class Triangle : public Figure<T>
 {
 private:
-    static const int VERTICES_COUNT = 3;
     std::unique_ptr<Point<T>[]> vertices;
+    static const int VERTICES_COUNT = 3;
 
 public:
     Triangle() : vertices(std::make_unique<Point<T>[]>(VERTICES_COUNT)) {}
+
+    Triangle(const Triangle &other) : vertices(std::make_unique<Point<T>[]>(VERTICES_COUNT))
+    {
+        for (int i = 0; i < VERTICES_COUNT; ++i)
+        {
+            vertices[i] = other.vertices[i];
+        }
+    }
+
+    Triangle &operator=(const Triangle &other)
+    {
+        if (this != &other)
+        {
+            vertices = std::make_unique<Point<T>[]>(VERTICES_COUNT);
+            for (int i = 0; i < VERTICES_COUNT; ++i)
+            {
+                vertices[i] = other.vertices[i];
+            }
+        }
+        return *this;
+    }
 
     Triangle(Triangle &&other) noexcept = default;
     Triangle &operator=(Triangle &&other) noexcept = default;
@@ -47,7 +68,7 @@ public:
     }
 
     void readFromStream(std::istream &is) override
-    { // Изменил имя и убрал const
+    {
         for (int i = 0; i < VERTICES_COUNT; ++i)
         {
             is >> vertices[i];
